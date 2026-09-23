@@ -4,11 +4,17 @@ package Taller01POO;
 
 import java.util.Scanner;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
 public class El_Grupo_De_Whatsapp {
+	
+	static String[] nombres;
+	static String[] ruts;
+	static String[] paralelos;
+	static String[] solicitudes;
 
 	public static void main(String[] args) {
 
@@ -23,31 +29,67 @@ public class El_Grupo_De_Whatsapp {
 		System.out.println("6) Analisis estadistico");
 		System.out.println("7) Salir");
 
+		System.out.print("Ingrese opción: ");
 		int opcion = scanner.nextInt();
 
 		while (opcion < 1 || opcion > 7) {
 
 			System.out.println("Opción invalida, intentelo nuevamente");
+			System.out.print("Ingrese opción: ");
 			opcion = scanner.nextInt();
+			
 		}
 
-		switch (opcion) {
+		while (opcion != 7) {
 
-		case 1:
-			cargarArchivos();
-		case 2:
-			procesarSolicitudes();
-		case 3:
-			inscripcionManual();
-		case 4:
-			administracionCurso();
-		case 5:
-			generarReportes();
-		case 6:
-			analisisEstadistico();
-		case 7:
-			break;
+			switch (opcion) {
+
+			case 1:
+				
+				cargarArchivos();
+
+				System.out.println("Archivos cargados con exito!");
+				System.out.println("- " + nombres.length + " alumnos en la lista.");
+				System.out.println("- " + solicitudes.length + " solicitudes de ingreso.");
+
+				break;
+				
+			case 2:
+				
+				procesarSolicitudes();
+				break;
+				
+			case 3:
+				inscripcionManual();
+				break;
+			case 4:
+				administracionCurso();
+				break;
+			case 5:
+				generarReportes();
+				break;
+			case 6:
+				analisisEstadistico();
+				break;
+			case 7:
+				break;
+
+			}
+
+			System.out.print("Ingrese opción: ");
+			opcion = scanner.nextInt();
+			
+			while (opcion < 1 || opcion > 7) {
+
+				System.out.println("Opción invalida, intentelo nuevamente");
+				System.out.print("Ingrese opción: ");
+				opcion = scanner.nextInt();
+				
+			}
+
 		}
+
+		System.out.println("Adios.");
 
 	}
 
@@ -72,39 +114,110 @@ public class El_Grupo_De_Whatsapp {
 	}
 
 	private static void procesarSolicitudes() {
-		// TODO Auto-generated method stub
+		
+		int admitidos = 0;
+		int rechazados = 0;
+		
+		for (int i = 0; i < solicitudes.length; i++) {
+			
+			boolean encontrado = false;
+
+			for (int j = 0; j < nombres.length; j++) {
+				
+				if (solicitudes[i].equals(nombres[j])) {
+					
+					System.out.println("[OK]       " + nombres[j] + " -> admitido en " + paralelos[j]);
+					admitidos++;
+					encontrado = true;
+					break;
+					
+				}
+				
+			}
+			
+			if (!encontrado) {
+				
+				System.out.println("[RECHAZO]  " + solicitudes[i] + " -> no pertenece a ningun paralelo");
+				rechazados++;
+				
+			}
+			
+		}
+		
+		System.out.println("Resumen: " + admitidos + " admitidos / " + rechazados + " rechazados.");
 
 	}
 
 	private static void cargarArchivos() {
-		
+
 		try {
-			
-			File alumnos = new File("Alumnos.txt");
-			File solicitudes = new File("Solicitudes.txt");
-			
-			Scanner lectorA = new Scanner(alumnos);
-			Scanner lectorS = new Scanner(solicitudes);
+
+			File Alumnos = new File("Alumnos.txt");
+			File Solicitudes = new File("Solicitudes.txt");
+
+			Scanner lectorA = new Scanner(Alumnos);
+			Scanner lectorS = new Scanner(Solicitudes);
 			
 			int contAlumnos = 0;
 			int contSolicitudes = 0;
-			
+
 			while (lectorA.hasNextLine()) {
 				
 				contAlumnos++;
 				lectorA.nextLine();
+				
 			}
-			
+
 			while (lectorS.hasNextLine()) {
 				
 				contSolicitudes++;
 				lectorS.nextLine();
+
 			}
 			
-		} catch (Exception e) {
+			nombres = new String[contAlumnos];
+	        ruts = new String[contAlumnos];
+	        paralelos = new String[contAlumnos];
+	        solicitudes = new String[contSolicitudes];
+	        
+	        File Alumnos2 = new File("Alumnos.txt");
+			File Solicitudes2 = new File("Solicitudes.txt");
+
+			Scanner lectorA2 = new Scanner(Alumnos2);
+			Scanner lectorS2 = new Scanner(Solicitudes2);
 			
+			int posicion = 0;
+			
+			while (lectorA2.hasNextLine()) {
+				
+				String linea = lectorA2.nextLine();
+				String[] partes = linea.split(";");
+				nombres[posicion] = partes[0] + " " + partes[1];
+				ruts[posicion] = partes[2];
+				paralelos[posicion] = partes[3];
+				posicion++;
+			}
+			
+			posicion = 0;
+			
+			while (lectorS2.hasNextLine()) {
+				
+				String linea = lectorS2.nextLine();
+				String[] partes = linea.split("-");
+				solicitudes[posicion] = partes[0] + " " + partes[1];
+				posicion++;
+				
+			}
+			
+
+			lectorA.close();
+			lectorS.close();
+			lectorA2.close();
+			lectorS2.close();
+
+		} catch (FileNotFoundException e) {
+
 			System.out.println("Archivo no encontrado, lo sentimos.");
-			
 		}
 
 	}
