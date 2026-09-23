@@ -15,21 +15,25 @@ public class El_Grupo_De_Whatsapp {
 	static String[] ruts;
 	static String[] paralelos;
 	static String[] solicitudes;
+	static String[] rechazados;
+	static Scanner scanner = new Scanner(System.in);
 
 	public static void main(String[] args) {
-
-		Scanner scanner = new Scanner(System.in);
 
 		mostrarMenu();
 
 		System.out.print("Ingrese opción: ");
 		int opcion = scanner.nextInt();
+		System.out.println("");
 
 		while (opcion < 1 || opcion > 7) {
 
 			System.out.println("Opción invalida, intentelo nuevamente");
+			System.out.println("");
+			mostrarMenu();
 			System.out.print("Ingrese opción: ");
 			opcion = scanner.nextInt();
+			System.out.println("");
 
 		}
 
@@ -44,25 +48,36 @@ public class El_Grupo_De_Whatsapp {
 				System.out.println("Archivos cargados con exito!");
 				System.out.println("- " + nombres.length + " alumnos en la lista.");
 				System.out.println("- " + solicitudes.length + " solicitudes de ingreso.");
-
+				System.out.println("");
+				mostrarMenu();
 				break;
 
 			case 2:
 
 				procesarSolicitudes();
+				System.out.println("");
+				mostrarMenu();
 				break;
 
 			case 3:
 				inscripcionManual();
+				System.out.println("");
+				mostrarMenu();
 				break;
 			case 4:
 				administracionCurso();
+				System.out.println("");
+				mostrarMenu();
 				break;
 			case 5:
 				generarReportes();
+				System.out.println("");
+				mostrarMenu();
 				break;
 			case 6:
 				analisisEstadistico();
+				System.out.println("");
+				mostrarMenu();
 				break;
 			case 7:
 				break;
@@ -71,12 +86,16 @@ public class El_Grupo_De_Whatsapp {
 
 			System.out.print("Ingrese opción: ");
 			opcion = scanner.nextInt();
+			System.out.println("");
 
 			while (opcion < 1 || opcion > 7) {
 
 				System.out.println("Opción invalida, intentelo nuevamente");
+				System.out.println("");
+				mostrarMenu();	
 				System.out.print("Ingrese opción: ");
 				opcion = scanner.nextInt();
+				System.out.println("");
 
 			}
 
@@ -96,6 +115,7 @@ public class El_Grupo_De_Whatsapp {
 		System.out.println("5) Generar reportes");
 		System.out.println("6) Analisis estadistico");
 		System.out.println("7) Salir");
+		System.out.println("");
 
 	}
 
@@ -115,34 +135,37 @@ public class El_Grupo_De_Whatsapp {
 	}
 
 	private static void inscripcionManual() {
-
-		Scanner scanner = new Scanner(System.in);
-		int opcion = scanner.nextInt();
-
+		
 		System.out.println("Como desea inscribir a la persona?");
 		System.out.println("1) Por nombre completo");
 		System.out.println("2) Por RUT");
 		System.out.print("Ingrese opcion: ");
+		int opcion = scanner.nextInt();
+		scanner.nextLine();
 
-		while (opcion != 1 || opcion != 2) {
+		while (opcion != 1 && opcion != 2) {
 
 			System.out.println("Opción invalida, intentelo nuevamente");
 			System.out.print("Ingrese opción: ");
 			opcion = scanner.nextInt();
-			scanner.next();
+			scanner.nextLine();
 		}
 
 		switch (opcion) {
 
 		case 1:
+			
 			System.out.print("Ingrese nombre completo: ");
 			String nombre = scanner.nextLine();
 			inscripcionNombre(nombre);
+			
 			break;
 		case 2:
+			
 			System.out.print("Ingrese RUT: ");
 			String rut = scanner.nextLine();
 			inscripcionRut(rut);
+			
 			break;
 		}
 
@@ -154,7 +177,7 @@ public class El_Grupo_De_Whatsapp {
 
 		for (int i = 0; i < nombres.length; i++) {
 
-			if (rut.equals(nombres[i])) {
+			if (rut.equals(ruts[i])) {
 
 				System.out.println(rut + " Admitido.");
 				encontrado = true;
@@ -179,7 +202,7 @@ public class El_Grupo_De_Whatsapp {
 
 		for (int i = 0; i < nombres.length; i++) {
 
-			if (nombre.equals(nombres[i])) {
+			if (nombre.toUpperCase().equals(nombres[i].toUpperCase())) {
 
 				System.out.println(nombre + " Admitido.");
 				encontrado = true;
@@ -198,8 +221,17 @@ public class El_Grupo_De_Whatsapp {
 
 	}
 
-	private static void modificarRegistroRechazados(String nombre) {
-		// TODO Auto-generated method stub
+	private static void modificarRegistroRechazados(String dato) {
+		
+		String[] listaTemporal = new String[rechazados.length + 1];
+
+	    for (int i = 0; i < rechazados.length; i++) {
+	        listaTemporal[i] = rechazados[i];
+	    }
+
+	    listaTemporal[rechazados.length] = dato;
+
+	    rechazados = listaTemporal;
 		
 	}
 
@@ -214,7 +246,7 @@ public class El_Grupo_De_Whatsapp {
 
 			for (int j = 0; j < nombres.length; j++) {
 
-				if (solicitudes[i].equals(nombres[j])) {
+				if (solicitudes[i].toUpperCase().equals(nombres[j].toUpperCase())) {
 
 					System.out.println("[OK]       " + nombres[j] + " -> admitido en " + paralelos[j]);
 					admitidos++;
@@ -269,6 +301,7 @@ public class El_Grupo_De_Whatsapp {
 			ruts = new String[contAlumnos];
 			paralelos = new String[contAlumnos];
 			solicitudes = new String[contSolicitudes];
+			rechazados = new String[contSolicitudes];
 
 			File Alumnos2 = new File("Alumnos.txt");
 			File Solicitudes2 = new File("Solicitudes.txt");
@@ -307,6 +340,7 @@ public class El_Grupo_De_Whatsapp {
 		} catch (FileNotFoundException e) {
 
 			System.out.println("Archivo no encontrado, lo sentimos.");
+			
 		}
 
 	}
