@@ -15,7 +15,7 @@ public class El_Grupo_De_Whatsapp {
 	static String[] ruts;
 	static String[] paralelos;
 	static String[] solicitudes;
-	static String[] rechazados;
+	static String[] rechazados = new String[0];
 	static Scanner scanner = new Scanner(System.in);
 
 	public static void main(String[] args) {
@@ -71,7 +71,6 @@ public class El_Grupo_De_Whatsapp {
 				break;
 			case 5:
 				generarReportes();
-				System.out.println("");
 				mostrarMenu();
 				break;
 			case 6:
@@ -92,7 +91,7 @@ public class El_Grupo_De_Whatsapp {
 
 				System.out.println("Opción invalida, intentelo nuevamente");
 				System.out.println("");
-				mostrarMenu();	
+				mostrarMenu();
 				System.out.print("Ingrese opción: ");
 				opcion = scanner.nextInt();
 				System.out.println("");
@@ -125,17 +124,138 @@ public class El_Grupo_De_Whatsapp {
 	}
 
 	private static void generarReportes() {
-		// TODO Auto-generated method stub
+
+		try {
+
+			int versionC1 = 1;
+			File archivoC1 = new File("ReporteC1-V" + versionC1 + ".txt");
+
+			while (archivoC1.exists()) {
+				versionC1++;
+				archivoC1 = new File("ReporteC1-V" + versionC1 + ".txt");
+			}
+
+			FileWriter escritorArchivoC1 = new FileWriter(archivoC1);
+			BufferedWriter escritorC1 = new BufferedWriter(escritorArchivoC1);
+
+			escritorC1.write("=== Miembros del grupo - Paralelo C1 ===");
+			escritorC1.newLine();
+
+			for (int i = 0; i < nombres.length; i++) {
+
+				if (paralelos[i].equals("C1")) {
+
+					escritorC1.write(nombres[i] + " - " + ruts[i] + "\n");
+
+				}
+			}
+
+			escritorC1.close();
+
+			int versionC2 = 1;
+			File archivoC2 = new File("ReporteC2-V" + versionC2 + ".txt");
+
+			while (archivoC2.exists()) {
+				versionC2++;
+				archivoC2 = new File("ReporteC2-V" + versionC2 + ".txt");
+			}
+
+			FileWriter escritorArchivoC2 = new FileWriter(archivoC2);
+			BufferedWriter escritorC2 = new BufferedWriter(escritorArchivoC2);
+
+			escritorC2.write("=== Miembros del grupo - Paralelo C2 ===");
+			escritorC2.newLine();
+
+			for (int i = 0; i < nombres.length; i++) {
+
+				if (paralelos[i].equals("C2")) {
+
+					escritorC2.write(nombres[i] + " - " + ruts[i] + "\n");
+
+				}
+			}
+
+			escritorC2.close();
+
+			int versionRechazados = 1;
+			File archivoRechazados = new File("Rechazados-V" + versionRechazados + ".txt");
+
+			while (archivoRechazados.exists()) {
+				versionRechazados++;
+				archivoRechazados = new File("Rechazados-V" + versionRechazados + ".txt");
+			}
+
+			FileWriter escritorArchivoRechazados = new FileWriter(archivoRechazados);
+			BufferedWriter escritorRechazados = new BufferedWriter(escritorArchivoRechazados);
+
+			escritorRechazados.write("=== Solicitudes rechazadas ===");
+			escritorRechazados.newLine();
+
+			for (int i = 0; i < rechazados.length; i++) {
+
+				escritorRechazados.write(rechazados[i] + "\n");
+
+			}
+
+			escritorRechazados.close();
+
+		} catch (IOException e) {
+
+			System.out.println("Error al crear el reporte.");
+
+		}
 
 	}
 
 	private static void administracionCurso() {
-		// TODO Auto-generated method stub
+		
+		menuAdministracionCurso();
+		
+		System.out.print("Ingrese opcion: ");
+		int opcion = scanner.nextInt();
+		System.out.println("");
+		
+		switch (opcion) {
+		case 1:
+			cambiarParalelo();
+			break;
+		case 2:
+			eliminarAlumno();
+			break;
+		case 3:
+			nuevoAlumno();
+			break;
+		}
 
 	}
 
-	private static void inscripcionManual() {
+	private static void nuevoAlumno() {
+		// TODO Auto-generated method stub
 		
+	}
+
+	private static void eliminarAlumno() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void cambiarParalelo() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void menuAdministracionCurso() {
+		
+		System.out.println("===== Administración del curso =====");
+		System.out.println("1) Cambiar paralelo");
+		System.out.println("2) Eliminar alumno");
+		System.out.println("3) Inscribir alumno nuevo");
+		System.out.println("");
+		
+	}
+
+	private static void inscripcionManual() {
+
 		System.out.println("Como desea inscribir a la persona?");
 		System.out.println("1) Por nombre completo");
 		System.out.println("2) Por RUT");
@@ -154,18 +274,18 @@ public class El_Grupo_De_Whatsapp {
 		switch (opcion) {
 
 		case 1:
-			
+
 			System.out.print("Ingrese nombre completo: ");
 			String nombre = scanner.nextLine();
 			inscripcionNombre(nombre);
-			
+
 			break;
 		case 2:
-			
+
 			System.out.print("Ingrese RUT: ");
 			String rut = scanner.nextLine();
 			inscripcionRut(rut);
-			
+
 			break;
 		}
 
@@ -190,7 +310,7 @@ public class El_Grupo_De_Whatsapp {
 		if (!encontrado) {
 
 			System.out.println(rut + " No encontrado, añadido al registro de rechazados");
-			modificarRegistroRechazados(rut); //Si se intentó por RUT y no está → como no tenemos su nombre, se registra el mensaje especial indicando que solo se dispone del RUT.
+			modificarRegistroRechazados("No tenemos su nombre, solo su rut: " + rut);
 
 		}
 
@@ -222,17 +342,17 @@ public class El_Grupo_De_Whatsapp {
 	}
 
 	private static void modificarRegistroRechazados(String dato) {
-		
+
 		String[] listaTemporal = new String[rechazados.length + 1];
 
-	    for (int i = 0; i < rechazados.length; i++) {
-	        listaTemporal[i] = rechazados[i];
-	    }
+		for (int i = 0; i < rechazados.length; i++) {
+			listaTemporal[i] = rechazados[i];
+		}
 
-	    listaTemporal[rechazados.length] = dato;
+		listaTemporal[rechazados.length] = dato;
 
-	    rechazados = listaTemporal;
-		
+		rechazados = listaTemporal;
+
 	}
 
 	private static void procesarSolicitudes() {
@@ -262,10 +382,13 @@ public class El_Grupo_De_Whatsapp {
 				System.out.println("[RECHAZO]  " + solicitudes[i] + " -> no pertenece a ningun paralelo");
 				rechazados++;
 
+				modificarRegistroRechazados(solicitudes[i] + " - No pertenece a ningun paralelo del curso");
+
 			}
 
 		}
-
+		
+		System.out.println("");
 		System.out.println("Resumen: " + admitidos + " admitidos / " + rechazados + " rechazados.");
 
 	}
@@ -301,7 +424,6 @@ public class El_Grupo_De_Whatsapp {
 			ruts = new String[contAlumnos];
 			paralelos = new String[contAlumnos];
 			solicitudes = new String[contSolicitudes];
-			rechazados = new String[contSolicitudes];
 
 			File Alumnos2 = new File("Alumnos.txt");
 			File Solicitudes2 = new File("Solicitudes.txt");
@@ -340,7 +462,7 @@ public class El_Grupo_De_Whatsapp {
 		} catch (FileNotFoundException e) {
 
 			System.out.println("Archivo no encontrado, lo sentimos.");
-			
+
 		}
 
 	}
