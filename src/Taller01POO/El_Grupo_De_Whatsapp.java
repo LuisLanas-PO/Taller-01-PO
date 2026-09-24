@@ -71,6 +71,7 @@ public class El_Grupo_De_Whatsapp {
 				break;
 			case 5:
 				generarReportes();
+				System.out.println("");
 				mostrarMenu();
 				break;
 			case 6:
@@ -119,6 +120,11 @@ public class El_Grupo_De_Whatsapp {
 	}
 
 	private static void analisisEstadistico() {
+		
+		if (ruts == null || solicitudes == null) {
+			System.out.println("Primero debe cargar los archivos.");
+			return;
+		}
 
 		int totalSolicitudes = solicitudes.length;
 		int totalRechazados = rechazados.length;
@@ -172,19 +178,24 @@ public class El_Grupo_De_Whatsapp {
 	}
 
 	private static void generarReportes() {
+		
+		if (ruts == null || solicitudes == null) {
+			System.out.println("Los reportes estan vacios, cargue los archivos primero.");
+			return;
+		}
 
 		menuGenerarReportes();
 		System.out.print("Ingrese opcion: ");
 		int opcion = scanner.nextInt();
 		System.out.println("");
-		
+
 		while (opcion < 1 || opcion > 3) {
-			
+
 			System.out.println("Opción invalida, intentelo nuevamente.");
 			System.out.print("Ingrese opcion: ");
 			opcion = scanner.nextInt();
 			System.out.println("");
-			
+
 		}
 
 		switch (opcion) {
@@ -334,6 +345,11 @@ public class El_Grupo_De_Whatsapp {
 	}
 
 	private static void administracionCurso() {
+
+		if (ruts == null || solicitudes == null) {
+			System.out.println("Primero debe cargar los archivos.");
+			return;
+		}
 
 		menuAdministracionCurso();
 
@@ -535,6 +551,11 @@ public class El_Grupo_De_Whatsapp {
 	}
 
 	private static void inscripcionManual() {
+		
+		if (ruts == null || solicitudes == null) {
+			System.out.println("Primero debe cargar los archivos.");
+			return;
+		}
 
 		System.out.println("Como desea inscribir a la persona?");
 		System.out.println("1) Por nombre completo");
@@ -640,6 +661,11 @@ public class El_Grupo_De_Whatsapp {
 	}
 
 	private static void procesarSolicitudes() {
+
+		if (ruts == null || solicitudes == null) {
+			System.out.println("Primero debe cargar los archivos.");
+			return;
+		}
 
 		int admitidos = 0;
 		int rechazados = 0;
