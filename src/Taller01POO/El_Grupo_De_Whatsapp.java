@@ -89,7 +89,7 @@ public class El_Grupo_De_Whatsapp {
 
 			while (opcion < 1 || opcion > 7) {
 
-				System.out.println("Opción invalida, intentelo nuevamente");
+				System.out.println("Opción invalida, intentelo nuevamente.");
 				System.out.println("");
 				mostrarMenu();
 				System.out.print("Ingrese opción: ");
@@ -119,43 +119,136 @@ public class El_Grupo_De_Whatsapp {
 	}
 
 	private static void analisisEstadistico() {
-		// TODO Auto-generated method stub
+
+		int totalSolicitudes = solicitudes.length;
+		int totalRechazados = rechazados.length;
+		int totalAdmitidos = totalSolicitudes - totalRechazados;
+
+		int alumnosC1 = 0;
+		int alumnosC2 = 0;
+
+		for (int i = 0; i < paralelos.length; i++) {
+
+			if (paralelos[i].equals("C1")) {
+				alumnosC1++;
+			} else if (paralelos[i].equals("C2")) {
+				alumnosC2++;
+			}
+		}
+
+		double porcentajeRechazados = 0;
+		double porcentajeC1 = 0;
+		double porcentajeC2 = 0;
+		double tasaAdmision = 0;
+
+		if (totalSolicitudes > 0) {
+			porcentajeRechazados = (totalRechazados * 100.0) / totalSolicitudes;
+			tasaAdmision = (totalAdmitidos * 100.0) / totalSolicitudes;
+		}
+
+		if (nombres.length > 0) {
+			porcentajeC1 = (alumnosC1 * 100.0) / nombres.length;
+			porcentajeC2 = (alumnosC2 * 100.0) / nombres.length;
+		}
+
+		System.out.println("===== ANALISIS ESTADISTICO =====");
+		System.out.println("");
+
+		System.out.println("1) Solicitudes rechazadas:");
+		System.out.println("- Total de intentos: " + totalSolicitudes);
+		System.out.println("- Total rechazadas: " + totalRechazados);
+		System.out.println("- Porcentaje de rechazo: " + porcentajeRechazados + "%");
+		System.out.println("");
+
+		System.out.println("2) Alumnos por paralelo:");
+		System.out.println("- C1: " + alumnosC1 + " alumnos (" + porcentajeC1 + "%)");
+		System.out.println("- C2: " + alumnosC2 + " alumnos (" + porcentajeC2 + "%)");
+		System.out.println("");
+
+		System.out.println("3) Tasa de admision:");
+		System.out.println("- Total admitidos: " + totalAdmitidos);
+		System.out.println("- Tasa de admision: " + tasaAdmision + "%");
 
 	}
 
 	private static void generarReportes() {
 
+		menuGenerarReportes();
+		System.out.print("Ingrese opcion: ");
+		int opcion = scanner.nextInt();
+		System.out.println("");
+		
+		while (opcion < 1 || opcion > 3) {
+			
+			System.out.println("Opción invalida, intentelo nuevamente.");
+			System.out.print("Ingrese opcion: ");
+			opcion = scanner.nextInt();
+			System.out.println("");
+			
+		}
+
+		switch (opcion) {
+		case 1:
+			generarReportesC1();
+			break;
+		case 2:
+			generarReportesC2();
+			break;
+		case 3:
+			generarReportesRechazados();
+			break;
+		}
+
+	}
+
+	private static void generarReportesRechazados() {
+
 		try {
 
-			int versionC1 = 1;
-			File archivoC1 = new File("ReporteC1-V" + versionC1 + ".txt");
+			int versionRechazados = 1;
 
-			while (archivoC1.exists()) {
-				versionC1++;
-				archivoC1 = new File("ReporteC1-V" + versionC1 + ".txt");
+			File archivoRechazados = new File("Rechazados-V" + versionRechazados + ".txt");
+
+			while (archivoRechazados.exists()) {
+
+				versionRechazados++;
+				archivoRechazados = new File("Rechazados-V" + versionRechazados + ".txt");
 			}
 
-			FileWriter escritorArchivoC1 = new FileWriter(archivoC1);
-			BufferedWriter escritorC1 = new BufferedWriter(escritorArchivoC1);
+			FileWriter escritorArchivoRechazados = new FileWriter(archivoRechazados);
+			BufferedWriter escritorRechazados = new BufferedWriter(escritorArchivoRechazados);
 
-			escritorC1.write("=== Miembros del grupo - Paralelo C1 ===");
-			escritorC1.newLine();
+			escritorRechazados.write("=== Solicitudes rechazadas ===");
+			escritorRechazados.newLine();
 
-			for (int i = 0; i < nombres.length; i++) {
+			for (int i = 0; i < rechazados.length; i++) {
 
-				if (paralelos[i].equals("C1")) {
-
-					escritorC1.write(nombres[i] + " - " + ruts[i] + "\n");
-
-				}
+				escritorRechazados.write(rechazados[i] + "\n");
 			}
 
-			escritorC1.close();
+			escritorRechazados.close();
+
+			System.out.println("Reporte de rechazados generado correctamente.");
+			System.out.println("");
+
+		} catch (IOException e) {
+
+			System.out.println("Error al crear el reporte de rechazados.");
+			System.out.println("");
+		}
+
+	}
+
+	private static void generarReportesC2() {
+
+		try {
 
 			int versionC2 = 1;
+
 			File archivoC2 = new File("ReporteC2-V" + versionC2 + ".txt");
 
 			while (archivoC2.exists()) {
+
 				versionC2++;
 				archivoC2 = new File("ReporteC2-V" + versionC2 + ".txt");
 			}
@@ -171,50 +264,83 @@ public class El_Grupo_De_Whatsapp {
 				if (paralelos[i].equals("C2")) {
 
 					escritorC2.write(nombres[i] + " - " + ruts[i] + "\n");
-
 				}
 			}
 
 			escritorC2.close();
 
-			int versionRechazados = 1;
-			File archivoRechazados = new File("Rechazados-V" + versionRechazados + ".txt");
-
-			while (archivoRechazados.exists()) {
-				versionRechazados++;
-				archivoRechazados = new File("Rechazados-V" + versionRechazados + ".txt");
-			}
-
-			FileWriter escritorArchivoRechazados = new FileWriter(archivoRechazados);
-			BufferedWriter escritorRechazados = new BufferedWriter(escritorArchivoRechazados);
-
-			escritorRechazados.write("=== Solicitudes rechazadas ===");
-			escritorRechazados.newLine();
-
-			for (int i = 0; i < rechazados.length; i++) {
-
-				escritorRechazados.write(rechazados[i] + "\n");
-
-			}
-
-			escritorRechazados.close();
+			System.out.println("Reporte C2 generado correctamente.");
+			System.out.println("");
 
 		} catch (IOException e) {
 
-			System.out.println("Error al crear el reporte.");
+			System.out.println("Error al crear el reporte C2.");
+			System.out.println("");
+		}
+
+	}
+
+	private static void generarReportesC1() {
+
+		try {
+
+			int versionC1 = 1;
+
+			File archivoC1 = new File("ReporteC1-V" + versionC1 + ".txt");
+
+			while (archivoC1.exists()) {
+
+				versionC1++;
+				archivoC1 = new File("ReporteC1-V" + versionC1 + ".txt");
+			}
+
+			FileWriter escritorArchivoC1 = new FileWriter(archivoC1);
+			BufferedWriter escritorC1 = new BufferedWriter(escritorArchivoC1);
+
+			escritorC1.write("=== Miembros del grupo - Paralelo C1 ===");
+			escritorC1.newLine();
+
+			for (int i = 0; i < nombres.length; i++) {
+
+				if (paralelos[i].equals("C1")) {
+
+					escritorC1.write(nombres[i] + " - " + ruts[i] + "\n");
+				}
+			}
+
+			escritorC1.close();
+
+			System.out.println("Reporte C1 generado correctamente.");
+			System.out.println("");
+
+		} catch (IOException e) {
+
+			System.out.println("Error al crear el reporte C1.");
+			System.out.println("");
 
 		}
 
 	}
 
+	private static void menuGenerarReportes() {
+
+		System.out.println("===== Generar reportes =====");
+		System.out.println("");
+		System.out.println("1) Reporte Paralelo C1");
+		System.out.println("2) Reporte Paralelo C2");
+		System.out.println("3) Reporte de solicitudes rechazadas");
+		System.out.println("");
+
+	}
+
 	private static void administracionCurso() {
-		
+
 		menuAdministracionCurso();
-		
+
 		System.out.print("Ingrese opcion: ");
 		int opcion = scanner.nextInt();
 		System.out.println("");
-		
+
 		switch (opcion) {
 		case 1:
 			cambiarParalelo();
@@ -230,28 +356,182 @@ public class El_Grupo_De_Whatsapp {
 	}
 
 	private static void nuevoAlumno() {
-		// TODO Auto-generated method stub
-		
+
+		scanner.nextLine();
+
+		System.out.print("Ingrese nombre: ");
+		String nombre = scanner.nextLine();
+
+		System.out.print("Ingrese apellido: ");
+		String apellido = scanner.nextLine();
+
+		System.out.print("Ingrese RUT (xxxxxxxx-x): ");
+		String rut = scanner.nextLine();
+
+		System.out.print("Ingrese paralelo (C1 o C2): ");
+		String paralelo = scanner.nextLine().toUpperCase();
+
+		while (!paralelo.equalsIgnoreCase("C1") && !paralelo.equalsIgnoreCase("C2")) {
+
+			System.out.print("Paralelo incorrecto, intentelo nuevamente: ");
+			paralelo = scanner.nextLine().toUpperCase();
+		}
+
+		String[] nuevosNombres = new String[nombres.length + 1];
+		String[] nuevosRuts = new String[ruts.length + 1];
+		String[] nuevosParalelos = new String[paralelos.length + 1];
+
+		for (int i = 0; i < nombres.length; i++) {
+
+			nuevosNombres[i] = nombres[i];
+			nuevosRuts[i] = ruts[i];
+			nuevosParalelos[i] = paralelos[i];
+		}
+
+		nuevosNombres[nombres.length] = nombre + " " + apellido;
+		nuevosRuts[ruts.length] = rut;
+		nuevosParalelos[paralelos.length] = paralelo;
+
+		nombres = nuevosNombres;
+		ruts = nuevosRuts;
+		paralelos = nuevosParalelos;
+
+		System.out.println("Alumno agregado correctamente.");
+		System.out.println("");
+
+		guardarAlumnos();
+
 	}
 
 	private static void eliminarAlumno() {
-		// TODO Auto-generated method stub
-		
+
+		System.out.print("Ingrese RUT del alumno: ");
+		String rut = scanner.next();
+
+		int posicion = -1;
+
+		for (int i = 0; i < ruts.length; i++) {
+
+			if (rut.equals(ruts[i])) {
+
+				posicion = i;
+				break;
+
+			}
+		}
+
+		if (posicion == -1) {
+
+			System.out.println("Alumno no encontrado.");
+			System.out.println("");
+
+		} else {
+
+			String[] nuevosNombres = new String[nombres.length - 1];
+			String[] nuevosRuts = new String[ruts.length - 1];
+			String[] nuevosParalelos = new String[paralelos.length - 1];
+
+			int j = 0;
+
+			for (int i = 0; i < nombres.length; i++) {
+
+				if (i != posicion) {
+
+					nuevosNombres[j] = nombres[i];
+					nuevosRuts[j] = ruts[i];
+					nuevosParalelos[j] = paralelos[i];
+
+					j++;
+				}
+			}
+
+			nombres = nuevosNombres;
+			ruts = nuevosRuts;
+			paralelos = nuevosParalelos;
+
+			System.out.println("Alumno eliminado.");
+			System.out.println("");
+
+			guardarAlumnos();
+
+		}
+
+	}
+
+	private static void guardarAlumnos() {
+
+		try {
+
+			File archivo = new File("Alumnos.txt");
+
+			FileWriter escritorArchivo = new FileWriter(archivo);
+			BufferedWriter escritor = new BufferedWriter(escritorArchivo);
+
+			for (int i = 0; i < nombres.length; i++) {
+
+				String[] partes = nombres[i].split(" ");
+
+				escritor.write(partes[0] + ";" + partes[1] + ";" + ruts[i] + ";" + paralelos[i] + "\n");
+
+			}
+
+			escritor.close();
+
+		} catch (IOException e) {
+
+			System.out.println("Error al guardar Alumnos.txt.");
+			System.out.println("");
+
+		}
+
 	}
 
 	private static void cambiarParalelo() {
-		// TODO Auto-generated method stub
-		
+
+		System.out.print("Ingrese RUT del alumno: ");
+		String rut = scanner.next();
+
+		boolean encontrado = false;
+
+		for (int i = 0; i < ruts.length; i++) {
+
+			if (rut.equals(ruts[i])) {
+
+				if (paralelos[i].equals("C1")) {
+
+					paralelos[i] = "C2";
+
+				} else {
+
+					paralelos[i] = "C1";
+
+				}
+
+				System.out.println("Nuevo paralelo: " + paralelos[i]);
+				System.out.println("");
+
+				encontrado = true;
+				break;
+			}
+		}
+
+		if (!encontrado) {
+
+			System.out.println("Alumno no encontrado.");
+			System.out.println("");
+
+		}
+
 	}
 
 	private static void menuAdministracionCurso() {
-		
+
 		System.out.println("===== Administración del curso =====");
 		System.out.println("1) Cambiar paralelo");
 		System.out.println("2) Eliminar alumno");
 		System.out.println("3) Inscribir alumno nuevo");
 		System.out.println("");
-		
+
 	}
 
 	private static void inscripcionManual() {
@@ -300,6 +580,7 @@ public class El_Grupo_De_Whatsapp {
 			if (rut.equals(ruts[i])) {
 
 				System.out.println(rut + " Admitido.");
+				System.out.println("");
 				encontrado = true;
 				break;
 
@@ -310,6 +591,7 @@ public class El_Grupo_De_Whatsapp {
 		if (!encontrado) {
 
 			System.out.println(rut + " No encontrado, añadido al registro de rechazados");
+			System.out.println("");
 			modificarRegistroRechazados("No tenemos su nombre, solo su rut: " + rut);
 
 		}
@@ -325,6 +607,7 @@ public class El_Grupo_De_Whatsapp {
 			if (nombre.toUpperCase().equals(nombres[i].toUpperCase())) {
 
 				System.out.println(nombre + " Admitido.");
+				System.out.println("");
 				encontrado = true;
 				break;
 
@@ -335,6 +618,7 @@ public class El_Grupo_De_Whatsapp {
 		if (!encontrado) {
 
 			System.out.println(nombre + " No encontrado, añadido al registro de rechazados");
+			System.out.println("");
 			modificarRegistroRechazados(nombre);
 
 		}
@@ -387,7 +671,7 @@ public class El_Grupo_De_Whatsapp {
 			}
 
 		}
-		
+
 		System.out.println("");
 		System.out.println("Resumen: " + admitidos + " admitidos / " + rechazados + " rechazados.");
 
